@@ -1,13 +1,16 @@
 import { FULL } from "../constants";
 import { CalendarIcon } from "./Icons";
 
-export default function EmptyState({ hasPeople, month, status, query = "" }) {
+export default function EmptyState({ hasPeople, month, status, query = "", birthYear = "" }) {
   const searching = query.trim().length > 0;
+  const hasSearchOrYear = searching || birthYear !== "";
   const title = hasPeople ? "No matching people" : "No people yet";
   const body = !hasPeople
     ? "Use the Add Person tab to create the first entry."
-    : searching
-    ? "No names match “" + query.trim() + "”. Try another search or adjust the filters."
+    : hasSearchOrYear
+    ? "No people match the selected search and filters. Try changing them."
+    : month === ""
+    ? "No people match the selected filters."
     : status === "no"
     ? "Everyone is complete for " + FULL[Number(month)] + "."
     : "Nobody is complete for " + FULL[Number(month)] + " yet.";

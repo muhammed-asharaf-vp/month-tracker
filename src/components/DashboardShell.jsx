@@ -113,26 +113,49 @@ export default function DashboardShell({
       </aside>
 
       <div className="min-h-dvh lg:ml-64">
-        <header className="border-b border-line bg-paper px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <header className="relative border-b border-line bg-paper">
+          <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-accent-deep via-accent to-brass" />
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-6 lg:px-8">
             <div className="min-w-0">
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">{title === "Dashboard" ? "Overview" : "Month Tracker"}</p>
-              <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-[1.75rem]">{title}</h1>
-              <p className="mt-1 text-sm text-muted">{description}</p>
+              <p className="mb-1.5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.17em] text-muted">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-brass" />
+                Month Tracker <span className="text-line">/</span> {title === "Dashboard" ? "Overview" : title}
+              </p>
+              <h1 className="text-[1.8rem] font-semibold leading-tight tracking-[-0.045em] text-ink sm:text-[2rem]">{title}</h1>
+              <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted">{description}</p>
             </div>
-            <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-end">
-              <div className="flex min-w-0 items-center gap-2.5 rounded-full border border-line bg-white/70 py-1 pl-1 pr-3">
-                <span aria-hidden="true" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-soft text-xs font-semibold uppercase text-accent-deep">
+
+            <div className="flex min-w-0 items-center justify-between gap-2 border-t border-line pt-3 sm:shrink-0 sm:justify-end sm:gap-3 sm:border-0 sm:pt-0">
+              <div className="flex min-w-0 max-w-[min(100%,280px)] items-center gap-2.5 rounded-xl border border-line bg-white/70 py-1.5 pl-1.5 pr-3">
+                <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-xs font-semibold uppercase text-accent-deep">
                   {email?.slice(0, 1) || "U"}
                 </span>
-                <p className="min-w-0 truncate text-xs font-medium text-ink sm:text-sm">{email}</p>
+                <div className="min-w-0">
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-muted">Signed in as</p>
+                  <p className="truncate text-xs font-medium text-ink sm:text-sm">{email}</p>
+                </div>
               </div>
+
               <button
                 type="button"
+                aria-label="Sign out"
                 onClick={onSignOut}
-                className="h-9 shrink-0 rounded-lg px-3 text-sm font-medium text-muted transition hover:bg-accent-soft hover:text-ink"
+                className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-line bg-paper px-2.5 text-sm font-medium text-muted transition hover:border-accent/30 hover:bg-accent-soft hover:text-ink sm:px-3"
               >
-                Sign out
+                <svg
+                  aria-hidden="true"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M10 17l5-5-5-5M15 12H3" />
+                  <path d="M12 3h6a3 3 0 013 3v12a3 3 0 01-3 3h-6" />
+                </svg>
+                <span className="hidden min-[420px]:inline">Sign out</span>
               </button>
             </div>
           </div>

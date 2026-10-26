@@ -27,6 +27,7 @@ export default function App() {
   const [dataError, setDataError] = useState("");
   const [actionError, setActionError] = useState("");
   const [month, setMonth] = useState("");
+  const [birthYear, setBirthYear] = useState("");
   const [status, setStatus] = useState("no");
   const [query, setQuery] = useState("");
   const [confirmId, setConfirmId] = useState(null);
@@ -111,15 +112,22 @@ export default function App() {
     };
   }, [session, loadPeople]);
 
+  const birthYears = useMemo(
+    () => [...new Set(people.map((person) => String(person.dob).slice(0, 4)).filter((year) => /^\d{4}$/.test(year)))]
+      .sort((first, second) => Number(second) - Number(first)),
+    [people]
+  );
+
   const shown = useMemo(
     () => people.filter((person) => {
       const matchesName = person.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase());
-      if (!matchesName) return false;
+      const matchesBirthYear = birthYear === "" || String(person.dob).slice(0, 4) === birthYear;
+      if (!matchesName || !matchesBirthYear) return false;
       if (month === "") return true;
       const ticked = !!person.months[Number(month)];
       return status === "yes" ? ticked : !ticked;
     }),
-    [people, month, status, query]
+    [people, month, status, query, birthYear]
   );
 
   const pending = people.filter((person) => !person.months[CUR]).length;
@@ -236,7 +244,10 @@ export default function App() {
                     count={shown.length}
                     total={people.length}
                     query={query}
+                    birthYear={birthYear}
+                    years={birthYears}
                     onQuery={setQuery}
+                    onBirthYear={setBirthYear}
                     onMonth={changeMonth}
                     onStatus={changeStatus}
                   />
@@ -267,6 +278,7 @@ export default function App() {
                       month={month}
                       status={status}
                       query={query}
+                      birthYear={birthYear}
                     />
                   )}
                 </>
