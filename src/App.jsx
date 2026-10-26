@@ -1,15 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase, supabaseConfigured } from "./supabase";
+import { FULL } from "./constants";
 import Header from "./components/Header";
-import Summary from "./components/Summary";
 import AddPersonForm from "./components/AddPersonForm";
 import Filters from "./components/Filters";
 import PersonCard from "./components/PersonCard";
 import EmptyState from "./components/EmptyState";
 import AuthGate from "./components/AuthGate";
+import DashboardShell from "./components/DashboardShell";
+import DashboardOverview from "./components/DashboardOverview";
 
 const CUR = new Date().getMonth();
 const PERSON_FIELDS = "id,name,dob,months";
+const TAB_META = {
+  overview: ["Dashboard", "Your yearly tracker at a glance."],
+  add: ["Add Person", "Add someone to the shared tracker."],
+  people: ["View People", "View and update monthly checklists."],
+};
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -22,6 +29,7 @@ export default function App() {
   const [month, setMonth] = useState("");
   const [status, setStatus] = useState("no");
   const [confirmId, setConfirmId] = useState(null);
+  const [activeTab, setActiveTab] = useState("overview");
   const loadSequence = useRef(0);
 
   useEffect(() => {
@@ -168,6 +176,10 @@ export default function App() {
     setConfirmId(null);
   };
 
+  const navigate = (tab) => {
+    setActiveTab(tab);
+    setConfirmId(null);
+  };
   const changeMonth = (value) => { setMonth(value); setConfirmId(null); };
   const changeStatus = (value) => { setStatus(value); setConfirmId(null); };
 
@@ -181,18 +193,14 @@ export default function App() {
       ) : !session ? (
         <AuthGate configured={supabaseConfigured} onSignIn={signIn} />
       ) : (
-        <main
-          id="main"
-          className="mx-auto max-w-6xl px-4 pb-[max(3rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))] sm:px-6 sm:pb-16 sm:pt-[max(2.5rem,env(safe-area-inset-top))] lg:px-8"
+        <DashboardShell
+          activeTab={activeTab}
+          onNavigate={navigate}
+          email={session.user.email}
+          onSignOut={signOut}
+          title={TAB_META[activeTab][0]}
+          description={TAB_META[activeTab][1]}
         >
-          <div className="mb-7 flex flex-col gap-5 border-b border-gray-200 pb-6 dark:border-gray-800 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
-            <Header />
-            <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-end">
-              <p className="min-w-0 truncate text-sm text-gray-600 dark:text-gray-400">Signed in as <span className="font-medium text-gray-900 dark:text-gray-200">{session.user.email}</span></p>
-              <button onClick={signOut} className="h-9 shrink-0 rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">Sign out</button>
-            </div>
-          </div>
-
           {actionError && <p role="alert" className="mb-5 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">{actionError}</p>}
           {peopleLoading ? (
             <p role="status" className="surface p-5 text-sm text-gray-600 dark:text-gray-400">Loading shared tracker…</p>
@@ -204,39 +212,51 @@ export default function App() {
           ) : (
             <>
               {dataError && <p role="alert" className="mb-5 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">Live refresh failed: {dataError}. Reload the page to retry.</p>}
-              <Summary pending={pending} total={people.length} done={done} />
-              <AddPersonForm onAdd={addPerson} />
-              <Filters
-                month={month}
-                status={status}
-                count={shown.length}
-                total={people.length}
-                onMonth={changeMonth}
-                onStatus={changeStatus}
-              />
 
-              <section aria-label="People" className="grid gap-4 sm:gap-5 lg:grid-cols-2">
-                {shown.map((person) => (
-                  <PersonCard
-                    key={person.id}
-                    person={person}
-                    currentMonth={CUR}
-                    confirming={confirmId === person.id}
-                    onToggle={(monthIndex) => void toggleMonth(person.id, monthIndex)}
-                    onAskDelete={() => setConfirmId(person.id)}
-                    onCancelDelete={() => setConfirmId(null)}
-                    onDelete={() => void deletePerson(person.id)}
+              {activeTab === "overview" && (
+                <DashboardOverview
+                  pending={pending}
+                  total={people.length}
+                  done={done}
+                  currentMonth={FULL[CUR]}
+                  onNavigate={navigate}
+                />
+              )}
+
+              {activeTab === "add" && <AddPersonForm onAdd={addPerson} />}
+
+              {activeTab === "people" && (
+                <>
+                  <Filters
+                    month={month}
+                    status={status}
+                    count={shown.length}
+                    total={people.length}
+                    onMonth={changeMonth}
+                    onStatus={changeStatus}
                   />
-                ))}
-              </section>
 
-              {shown.length === 0 && <EmptyState hasPeople={people.length > 0} month={month} status={status} />}
-              <footer className="mt-10 border-t border-gray-200 pt-5 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400 sm:mt-12">
-                Changes are shared with signed-in tracker members.
-              </footer>
+                  <section aria-label="People" className="grid gap-4 sm:gap-5 lg:grid-cols-2">
+                    {shown.map((person) => (
+                      <PersonCard
+                        key={person.id}
+                        person={person}
+                        currentMonth={CUR}
+                        confirming={confirmId === person.id}
+                        onToggle={(monthIndex) => void toggleMonth(person.id, monthIndex)}
+                        onAskDelete={() => setConfirmId(person.id)}
+                        onCancelDelete={() => setConfirmId(null)}
+                        onDelete={() => void deletePerson(person.id)}
+                      />
+                    ))}
+                  </section>
+
+                  {shown.length === 0 && <EmptyState hasPeople={people.length > 0} month={month} status={status} />}
+                </>
+              )}
             </>
           )}
-        </main>
+        </DashboardShell>
       )}
     </div>
   );
