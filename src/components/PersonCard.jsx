@@ -17,34 +17,34 @@ export default function PersonCard({
   const progress = Math.round((done / 12) * 100);
 
   return (
-    <article className="border-b border-gray-200 px-4 py-4 last:border-0 sm:px-5">
+    <article className="border-b border-line px-4 py-4 last:border-0 sm:px-5">
       <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(150px,220px)_auto] md:items-center md:gap-5">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-sm font-semibold text-gray-800">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-canvas text-sm font-semibold text-ink">
             {initials(person.name)}
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-semibold text-gray-950">{person.name}</h3>
-            <p className="mt-0.5 truncate text-sm tabular-nums text-gray-500">
+            <h3 className="truncate text-sm font-semibold text-ink">{person.name}</h3>
+            <p className="mt-0.5 truncate text-sm tabular-nums text-muted">
               {fmt(person.dob)} <span aria-hidden="true">·</span> {age(person.dob)} yrs
             </p>
           </div>
         </div>
 
         <div className="min-w-0">
-          <div className="mb-1.5 flex items-center justify-between text-xs text-gray-500">
+          <div className="mb-1.5 flex items-center justify-between text-xs text-muted">
             <span>Year progress</span>
-            <span className="font-medium tabular-nums text-gray-700">{done} / 12</span>
+            <span className="font-medium tabular-nums text-ink">{done} / 12</span>
           </div>
           <div
-            className="h-1.5 overflow-hidden rounded-full bg-gray-200"
+            className="h-1.5 overflow-hidden rounded-full bg-line"
             role="progressbar"
             aria-label={person.name + " yearly progress"}
             aria-valuemin="0"
             aria-valuemax="12"
             aria-valuenow={done}
           >
-            <div className="h-full rounded-full bg-gray-950 transition-[width]" style={{ width: progress + "%" }} />
+            <div className="h-full rounded-full bg-accent transition-[width]" style={{ width: progress + "%" }} />
           </div>
         </div>
 
@@ -54,7 +54,7 @@ export default function PersonCard({
             aria-expanded={expanded}
             aria-controls={"months-" + person.id}
             onClick={() => setExpanded((value) => !value)}
-            className="inline-flex h-9 items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            className="inline-flex h-9 items-center gap-2 rounded-xl border border-line bg-paper px-3 text-sm font-medium text-ink transition hover:border-accent/30 hover:bg-accent-soft"
           >
             {expanded ? "Hide months" : "Months"}
             <svg
@@ -76,14 +76,14 @@ export default function PersonCard({
               <button
                 type="button"
                 onClick={onDelete}
-                className="h-9 rounded-lg bg-gray-950 px-3 text-sm font-medium text-white transition hover:bg-gray-800"
+                className="h-9 rounded-xl bg-[#9B3F36] px-3 text-sm font-medium text-white transition hover:bg-[#82352E]"
               >
                 Delete
               </button>
               <button
                 type="button"
                 onClick={onCancelDelete}
-                className="h-9 rounded-lg border border-gray-300 px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+                className="h-9 rounded-xl border border-line px-3 text-sm font-medium text-muted transition hover:bg-canvas hover:text-ink"
               >
                 Cancel
               </button>
@@ -93,7 +93,7 @@ export default function PersonCard({
               type="button"
               aria-label={"Delete " + person.name}
               onClick={onAskDelete}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-950"
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-muted transition hover:bg-[#F7EAE6] hover:text-[#9B3F36]"
             >
               <TrashIcon />
             </button>
@@ -102,8 +102,8 @@ export default function PersonCard({
       </div>
 
       {expanded && (
-        <div id={"months-" + person.id} className="mt-4 border-t border-gray-200 pt-4">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-gray-500">Monthly checklist</p>
+        <div id={"months-" + person.id} className="mt-4 border-t border-line pt-4">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">Monthly checklist</p>
           <div className="grid grid-cols-3 gap-2 min-[480px]:grid-cols-4 md:grid-cols-6">
             {MONTHS.map((label, index) => {
               const checked = !!person.months[index];
@@ -115,11 +115,11 @@ export default function PersonCard({
                   aria-label={FULL[index] + " for " + person.name}
                   onClick={() => onToggle(index)}
                   className={
-                    "flex min-h-10 items-center justify-center gap-1 rounded-lg border px-2 text-sm font-medium transition " +
+                    "flex min-h-10 items-center justify-center gap-1 rounded-xl border px-2 text-sm font-medium transition " +
                     (checked
-                      ? "border-gray-950 bg-gray-950 text-white hover:bg-gray-800"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50") +
-                    (!checked && index === currentMonth ? " ring-1 ring-inset ring-gray-950" : "")
+                      ? "border-accent-deep bg-accent-deep text-white hover:bg-accent"
+                      : "border-line bg-paper text-ink hover:border-accent/40 hover:bg-accent-soft") +
+                    (!checked && index === currentMonth ? " ring-1 ring-inset ring-brass" : "")
                   }
                 >
                   {checked && <CheckIcon />}

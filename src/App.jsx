@@ -187,11 +187,11 @@ export default function App() {
   const changeStatus = (value) => { setStatus(value); setConfirmId(null); };
 
   return (
-    <div className="min-h-screen min-h-dvh overflow-x-hidden bg-[#f7f7f6] font-sans text-gray-950 antialiased [&_button:focus-visible]:outline-none [&_button:focus-visible]:ring-2 [&_button:focus-visible]:ring-gray-900">
+    <div className="min-h-screen min-h-dvh overflow-x-hidden bg-canvas font-sans text-ink antialiased [&_button:focus-visible]:outline-none [&_button:focus-visible]:ring-2 [&_button:focus-visible]:ring-accent">
       {authLoading ? (
         <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
           <Header />
-          <p role="status" className="text-sm text-gray-600">Checking sign-in…</p>
+          <p role="status" className="text-sm text-muted">Checking sign-in…</p>
         </main>
       ) : !session ? (
         <AuthGate configured={supabaseConfigured} onSignIn={signIn} />
@@ -204,17 +204,17 @@ export default function App() {
           title={TAB_META[activeTab][0]}
           description={TAB_META[activeTab][1]}
         >
-          {actionError && <p role="alert" className="mb-5 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900">{actionError}</p>}
+          {actionError && <p role="alert" className="mb-5 rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink">{actionError}</p>}
           {peopleLoading ? (
-            <p role="status" className="surface p-5 text-sm text-gray-600">Loading shared tracker…</p>
+            <p role="status" className="surface p-5 text-sm text-muted">Loading shared tracker…</p>
           ) : !peopleLoaded ? (
             <div role="alert" className="surface p-5">
-              <p className="text-sm text-gray-700">Could not load the shared tracker. {dataError}</p>
-              <button onClick={() => void loadPeople({ initial: true })} className="mt-4 h-10 rounded-lg bg-gray-950 px-4 text-sm font-semibold text-white hover:bg-gray-800">Try again</button>
+              <p className="text-sm text-ink">Could not load the shared tracker. {dataError}</p>
+              <button onClick={() => void loadPeople({ initial: true })} className="mt-4 h-10 rounded-xl bg-accent-deep px-4 text-sm font-semibold text-white hover:bg-accent">Try again</button>
             </div>
           ) : (
             <>
-              {dataError && <p role="alert" className="mb-5 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900">Live refresh failed: {dataError}. Reload the page to retry.</p>}
+              {dataError && <p role="alert" className="mb-5 rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink">Live refresh failed: {dataError}. Reload the page to retry.</p>}
 
               {activeTab === "overview" && (
                 <DashboardOverview
@@ -243,7 +243,7 @@ export default function App() {
 
                   {shown.length > 0 ? (
                     <section aria-label="People" className="surface overflow-hidden">
-                      <div className="hidden grid-cols-[minmax(0,1fr)_minmax(150px,220px)_auto] items-center gap-5 border-b border-gray-200 bg-gray-50 px-5 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-gray-500 md:grid">
+                      <div className="hidden grid-cols-[minmax(0,1fr)_minmax(150px,220px)_auto] items-center gap-5 border-b border-line bg-canvas px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted md:grid">
                         <span>Person</span>
                         <span>Progress</span>
                         <span className="text-right">Actions</span>

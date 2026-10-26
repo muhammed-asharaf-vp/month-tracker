@@ -5,7 +5,7 @@ export default function EmptyState({ hasPeople, month, status, query = "" }) {
   const searching = query.trim().length > 0;
   const title = hasPeople ? "No matching people" : "No people yet";
   const body = !hasPeople
-    ? "Add a name and date of birth above, then tick months as they are completed."
+    ? "Use the Add Person tab to create the first entry."
     : searching
     ? "No names match “" + query.trim() + "”. Try another search or adjust the filters."
     : status === "no"
@@ -14,11 +14,11 @@ export default function EmptyState({ hasPeople, month, status, query = "" }) {
 
   return (
     <div className="surface flex flex-col items-center px-4 py-10 text-center sm:px-6 sm:py-12">
-      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-800">
+      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent">
         <CalendarIcon />
       </div>
-      <h3 className="text-lg font-semibold tracking-tight text-gray-950">{title}</h3>
-      <p className="mt-1 max-w-sm text-sm text-gray-500 [text-wrap:pretty]">{body}</p>
+      <h3 className="text-lg font-semibold tracking-tight text-ink">{title}</h3>
+      <p className="mt-1 max-w-sm text-sm text-muted [text-wrap:pretty]">{body}</p>
     </div>
   );
 }

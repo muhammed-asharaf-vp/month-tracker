@@ -6,11 +6,11 @@ export default function Filters({ month, status, count, total, query, onQuery, o
   return (
     <section aria-label="People filters" className="mb-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-gray-600" aria-live="polite">
-          Showing <span className="font-semibold tabular-nums text-gray-950">{count}</span> of {total} people
+        <p className="text-sm text-muted" aria-live="polite">
+          Showing <span className="font-semibold tabular-nums text-ink">{count}</span> of {total} people
         </p>
 
-        <div className="flex flex-col gap-2 min-[480px]:flex-row min-[480px]:items-center">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <label htmlFor="people-search" className="sr-only">Search people by name</label>
           <input
             id="people-search"
@@ -18,7 +18,7 @@ export default function Filters({ month, status, count, total, query, onQuery, o
             value={query}
             onChange={(event) => onQuery(event.target.value)}
             placeholder="Search by name"
-            className="h-10 min-w-0 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-950 focus:ring-2 focus:ring-gray-950/10 min-[480px]:w-52"
+            className="h-10 min-w-0 rounded-xl border border-line bg-paper px-3.5 text-sm text-ink outline-none placeholder:text-muted/70 focus:border-accent focus:ring-4 focus:ring-accent/10 sm:w-52"
           />
 
           <label htmlFor="month-filter" className="sr-only">Filter by month</label>
@@ -26,7 +26,7 @@ export default function Filters({ month, status, count, total, query, onQuery, o
             id="month-filter"
             value={month}
             onChange={(event) => onMonth(event.target.value)}
-            className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-800 outline-none focus:border-gray-950 focus:ring-2 focus:ring-gray-950/10 min-[480px]:w-40"
+            className="h-10 w-full rounded-xl border border-line bg-paper px-3.5 text-sm font-medium text-ink outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 sm:w-40"
           >
             <option value="">All months</option>
             {FULL.map((label, idx) => (
@@ -38,7 +38,7 @@ export default function Filters({ month, status, count, total, query, onQuery, o
             <div
               role="group"
               aria-label="Filter by completion status"
-              className="inline-flex h-10 rounded-lg border border-gray-300 bg-white p-1"
+              className="inline-flex h-10 rounded-xl border border-line bg-paper p-1"
             >
               {[["no", "Pending"], ["yes", "Complete"]].map(([value, label]) => {
                 const selected = status === value;
@@ -49,10 +49,10 @@ export default function Filters({ month, status, count, total, query, onQuery, o
                     aria-pressed={selected}
                     onClick={() => onStatus(value)}
                     className={
-                      "rounded-md px-3 text-sm font-medium transition " +
+                      "rounded-lg px-3 text-sm font-medium transition " +
                       (selected
-                        ? "bg-gray-950 text-white"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-950")
+                        ? "bg-accent-deep text-white"
+                        : "text-muted hover:bg-accent-soft hover:text-ink")
                     }
                   >
                     {label}

@@ -5,7 +5,15 @@
 @layer base {
   body {
     font-feature-settings: "cv11", "ss01";
+    background: #f4f1ea;
+    color: #282821;
   }
+
+  ::selection {
+    background: #e9eee5;
+    color: #282821;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto !important; }
   }
@@ -13,6 +21,6 @@
 
 @layer components {
   .surface {
-    @apply rounded-xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03)] dark:border-gray-800 dark:bg-gray-900 dark:shadow-none;
+    @apply rounded-2xl border border-line bg-paper shadow-[0_8px_28px_rgba(40,40,33,0.045)];
   }
 }
