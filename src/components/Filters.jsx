@@ -2,62 +2,59 @@ import { MONTHS } from "../constants";
 
 export default function Filters({ month, status, count, total, onMonth, onStatus }) {
   const noMonth = month === "";
-  return (
-    <section aria-label="Filters" className="mb-5 sm:mb-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div
-          role="group"
-          aria-label="Tick status"
-          className={
-            "inline-flex rounded-lg bg-gray-200/70 p-1 transition dark:bg-white/5" +
-            (noMonth ? " pointer-events-none opacity-40" : "")
-          }
-        >
-          {[["no", "Not ticked"], ["yes", "Ticked"]].map(([v, label]) => {
-            const on = status === v;
-            return (
-              <button
-                key={v}
-                aria-pressed={on}
-                disabled={noMonth}
-                onClick={() => onStatus(v)}
-                className={
-                  "h-8 rounded-md px-4 text-sm font-medium transition duration-200 active:scale-95 " +
-                  (on
-                    ? "bg-white text-gray-950 shadow-sm dark:bg-gray-700 dark:text-gray-200"
-                    : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white")
-                }
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-        <span aria-live="polite" className="text-sm tabular-nums text-gray-500 dark:text-gray-400">
-          {count} of {total} people
-        </span>
-      </div>
 
-      <div role="group" aria-label="Filter by month" className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 py-1 sm:flex-wrap sm:overflow-visible">
-        {["All", ...MONTHS].map((label, idx) => {
-          const val = idx === 0 ? "" : String(idx - 1);
-          const on = month === val;
-          return (
-            <button
-              key={label}
-              aria-pressed={on}
-              onClick={() => onMonth(val)}
-              className={
-                "inline-flex h-9 shrink-0 items-center justify-center rounded-lg px-3.5 text-sm font-medium transition duration-200 active:scale-95 " +
-                (on
-                  ? "bg-gray-900 text-white"
-                  : "bg-white text-gray-600 ring-1 ring-inset ring-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:text-gray-300 dark:ring-white/10 dark:hover:bg-white/10")
-              }
-            >
-              {label}
-            </button>
-          );
-        })}
+  return (
+    <section aria-label="People and filters" className="mb-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-950 dark:text-white">People</h2>
+          <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400" aria-live="polite">
+            Showing {count} of {total}
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2 min-[420px]:flex-row min-[420px]:items-center">
+          <label htmlFor="month-filter" className="sr-only">Filter by month</label>
+          <select
+            id="month-filter"
+            value={month}
+            onChange={(event) => onMonth(event.target.value)}
+            className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-800 outline-none transition focus:border-gray-950 focus:ring-2 focus:ring-gray-950/10 min-[420px]:w-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:focus:border-gray-200 dark:focus:ring-white/10"
+          >
+            <option value="">All months</option>
+            {MONTHS.map((label, idx) => (
+              <option key={label} value={String(idx)}>{label}</option>
+            ))}
+          </select>
+
+          <div
+            role="group"
+            aria-label="Filter by completion status"
+            className={"inline-flex h-10 rounded-lg border border-gray-300 bg-white p-1 dark:border-gray-700 dark:bg-gray-900" + (noMonth ? " opacity-50" : "")}
+            title={noMonth ? "Select a month to filter by status." : undefined}
+          >
+            {[["no", "Pending"], ["yes", "Complete"]].map(([value, label]) => {
+              const selected = status === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={selected}
+                  disabled={noMonth}
+                  onClick={() => onStatus(value)}
+                  className={
+                    "rounded-md px-3 text-sm font-medium transition " +
+                    (selected
+                      ? "bg-gray-950 text-white dark:bg-white dark:text-gray-950"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-950 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white")
+                  }
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );

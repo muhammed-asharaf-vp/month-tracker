@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { PlusIcon } from "./Icons";
 
 const inputBase =
-  "block h-11 w-full min-w-0 rounded-lg border bg-white px-3.5 text-sm text-gray-900 outline-none transition duration-200 placeholder:text-gray-400 focus:border-gray-900 focus:ring-4 focus:ring-gray-900/15 dark:bg-gray-950 dark:text-gray-100";
-const labelCls = "mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300";
+  "block h-11 w-full min-w-0 rounded-lg border bg-white px-3.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-950 focus:ring-2 focus:ring-gray-950/10 dark:bg-gray-950 dark:text-gray-100 dark:focus:border-gray-200 dark:focus:ring-white/10";
+const labelCls = "mb-1.5 block text-sm font-medium text-gray-800 dark:text-gray-300";
 
 export default function AddPersonForm({ onAdd }) {
   const [name, setName] = useState("");
@@ -59,11 +59,14 @@ export default function AddPersonForm({ onAdd }) {
   };
 
   const border = (bad) =>
-    bad ? " border-gray-700 ring-2 ring-gray-700/30" : " border-gray-300 dark:border-white/15";
+    bad ? " border-gray-950 ring-2 ring-gray-950/15 dark:border-gray-200 dark:ring-white/15" : " border-gray-300 dark:border-gray-700";
 
   return (
-    <section className="surface mb-6 p-4 sm:mb-8 sm:p-6">
-      <h2 className="mb-4 text-lg font-semibold tracking-tight sm:mb-5 sm:text-xl">Add a person</h2>
+    <section className="surface mb-7 p-4 sm:p-5">
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold tracking-tight text-gray-950 dark:text-white">Add a person</h2>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Add a name and date of birth to the shared tracker.</p>
+      </div>
       <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_13rem_auto] sm:items-end">
         <div>
           <label htmlFor="person-name" className={labelCls}>Full name</label>
@@ -97,13 +100,13 @@ export default function AddPersonForm({ onAdd }) {
           type="button"
           onClick={() => void submit()}
           disabled={saving}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-sm font-semibold text-white transition duration-200 hover:bg-gray-800 active:scale-[0.98] disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gray-950 px-6 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 sm:w-auto"
         >
           <PlusIcon />
           {saving ? "Saving…" : "Add"}
         </button>
       </div>
-      <p role="alert" className={"mt-3 text-sm text-gray-900 dark:text-gray-300" + (error ? "" : " hidden")}>
+      <p role="alert" className={"mt-3 text-sm text-gray-800 dark:text-gray-200" + (error ? "" : " hidden")}>
         {error}
       </p>
     </section>

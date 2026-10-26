@@ -1,23 +1,20 @@
-const label = "mt-1.5 text-xs leading-snug text-gray-500 sm:text-sm dark:text-gray-400";
-const num = "text-3xl font-semibold leading-none tracking-tight tabular-nums sm:text-4xl";
+const label = "text-xs font-medium uppercase tracking-[0.08em] text-gray-500 dark:text-gray-400";
+const num = "mt-3 text-3xl font-semibold leading-none tracking-tight tabular-nums text-gray-950 sm:text-4xl dark:text-white";
 
 export default function Summary({ pending, total, done }) {
   return (
-    <section
-      aria-label="Summary"
-      className="surface mb-6 grid grid-cols-3 divide-x divide-gray-200 sm:mb-8 dark:divide-white/10"
-    >
-      <div className="p-4 sm:p-6">
-        <p className={num + " text-gray-900 dark:text-gray-300"}>{pending}</p>
+    <section aria-label="Summary" className="mb-7 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+      <div className="surface p-4 sm:p-5">
         <p className={label}>Pending this month</p>
+        <p className={num}>{pending}</p>
       </div>
-      <div className="p-4 sm:p-6">
-        <p className={num}>{total}</p>
+      <div className="surface p-4 sm:p-5">
         <p className={label}>People</p>
+        <p className={num}>{total}</p>
       </div>
-      <div className="p-4 sm:p-6">
-        <p className={num}>{done}</p>
+      <div className="surface p-4 sm:p-5">
         <p className={label}>Fully complete</p>
+        <p className={num}>{done}</p>
       </div>
     </section>
   );

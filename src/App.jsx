@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase, supabaseConfigured } from "./supabase";
-import Background from "./components/Background";
 import Header from "./components/Header";
 import Summary from "./components/Summary";
 import AddPersonForm from "./components/AddPersonForm";
@@ -173,10 +172,9 @@ export default function App() {
   const changeStatus = (value) => { setStatus(value); setConfirmId(null); };
 
   return (
-    <div className="min-h-screen min-h-dvh overflow-x-hidden bg-gray-50 font-sans text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100 [&_button:focus-visible]:outline-none [&_button:focus-visible]:ring-2 [&_button:focus-visible]:ring-gray-900">
-      <Background />
+    <div className="min-h-screen min-h-dvh overflow-x-hidden bg-[#f7f7f6] font-sans text-gray-950 antialiased dark:bg-[#111111] dark:text-gray-100 [&_button:focus-visible]:outline-none [&_button:focus-visible]:ring-2 [&_button:focus-visible]:ring-gray-900 dark:[&_button:focus-visible]:ring-gray-100">
       {authLoading ? (
-        <main className="relative z-10 mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
           <Header />
           <p role="status" className="text-sm text-gray-600 dark:text-gray-400">Checking sign-in…</p>
         </main>
@@ -185,25 +183,27 @@ export default function App() {
       ) : (
         <main
           id="main"
-          className="relative z-10 mx-auto max-w-4xl px-4 pb-[max(4rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))] sm:px-6 sm:pb-24 sm:pt-[max(2.5rem,env(safe-area-inset-top))] lg:max-w-5xl lg:px-8 2xl:max-w-6xl"
+          className="mx-auto max-w-6xl px-4 pb-[max(3rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))] sm:px-6 sm:pb-16 sm:pt-[max(2.5rem,env(safe-area-inset-top))] lg:px-8"
         >
-          <Header />
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <p className="min-w-0 truncate text-sm text-gray-600 dark:text-gray-400">Signed in as {session.user.email}</p>
-            <button onClick={signOut} className="h-9 rounded-lg px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-white/10">Sign out</button>
+          <div className="mb-7 flex flex-col gap-5 border-b border-gray-200 pb-6 dark:border-gray-800 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
+            <Header />
+            <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-end">
+              <p className="min-w-0 truncate text-sm text-gray-600 dark:text-gray-400">Signed in as <span className="font-medium text-gray-900 dark:text-gray-200">{session.user.email}</span></p>
+              <button onClick={signOut} className="h-9 shrink-0 rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">Sign out</button>
+            </div>
           </div>
 
-          {actionError && <p role="alert" className="mb-4 rounded-lg bg-gray-100 px-4 py-3 text-sm text-gray-900 dark:bg-white/10 dark:text-gray-200">{actionError}</p>}
+          {actionError && <p role="alert" className="mb-5 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">{actionError}</p>}
           {peopleLoading ? (
             <p role="status" className="surface p-5 text-sm text-gray-600 dark:text-gray-400">Loading shared tracker…</p>
           ) : !peopleLoaded ? (
             <div role="alert" className="surface p-5">
               <p className="text-sm text-gray-700 dark:text-gray-300">Could not load the shared tracker. {dataError}</p>
-              <button onClick={() => void loadPeople({ initial: true })} className="mt-4 h-10 rounded-lg bg-gray-900 px-4 text-sm font-semibold text-white hover:bg-gray-800">Try again</button>
+              <button onClick={() => void loadPeople({ initial: true })} className="mt-4 h-10 rounded-lg bg-gray-950 px-4 text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200">Try again</button>
             </div>
           ) : (
             <>
-              {dataError && <p role="alert" className="mb-4 rounded-lg bg-gray-100 px-4 py-3 text-sm text-gray-900 dark:bg-white/10 dark:text-gray-200">Live refresh failed: {dataError}. Reload the page to retry.</p>}
+              {dataError && <p role="alert" className="mb-5 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">Live refresh failed: {dataError}. Reload the page to retry.</p>}
               <Summary pending={pending} total={people.length} done={done} />
               <AddPersonForm onAdd={addPerson} />
               <Filters
@@ -215,12 +215,11 @@ export default function App() {
                 onStatus={changeStatus}
               />
 
-              <section aria-label="People" className="grid gap-4 sm:gap-5">
-                {shown.map((person, index) => (
+              <section aria-label="People" className="grid gap-4 sm:gap-5 lg:grid-cols-2">
+                {shown.map((person) => (
                   <PersonCard
                     key={person.id}
                     person={person}
-                    index={index}
                     currentMonth={CUR}
                     confirming={confirmId === person.id}
                     onToggle={(monthIndex) => void toggleMonth(person.id, monthIndex)}
@@ -232,7 +231,7 @@ export default function App() {
               </section>
 
               {shown.length === 0 && <EmptyState hasPeople={people.length > 0} month={month} status={status} />}
-              <footer className="mt-12 text-sm sm:mt-16 text-gray-500 dark:text-gray-400">
+              <footer className="mt-10 border-t border-gray-200 pt-5 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400 sm:mt-12">
                 Changes are shared with signed-in tracker members.
               </footer>
             </>
